@@ -1,0 +1,4 @@
+.hero h1 + p,
+.section-title p {
+  display: none !important;
+}

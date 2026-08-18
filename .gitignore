@@ -1,0 +1,16 @@
+# Local meeting data and generated documents
+/archive/
+/outputs/
+/data/records.json
+
+# Uploaded and temporary files
+/_qa_*/
+/_render_*/
+/__pycache__/
+*.py[cod]
+
+# Editor and operating-system files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
