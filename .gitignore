@@ -9,6 +9,13 @@
 /__pycache__/
 *.py[cod]
 
+# Local build tools and packaged binaries
+/.build_tools/
+/build/
+/dist/
+/build_installer/
+/release/
+
 # Editor and operating-system files
 .DS_Store
 Thumbs.db

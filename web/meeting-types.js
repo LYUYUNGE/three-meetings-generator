@@ -9,8 +9,8 @@
   function setParticipantIdentityVisibility(type){
     document.querySelectorAll('.participant-row').forEach(row=>{
       row.querySelectorAll('input[type=checkbox]').forEach(input=>{
-        if(!['董事','监事','高级管理人员'].includes(input.value))return;
-        const show=type==='supervisory'?input.value==='监事':type==='board'?input.value!=='监事':true;
+        if(!['股东','董事','监事','高级管理人员','其他'].includes(input.value))return;
+        const show=type==='supervisory'?['监事','其他'].includes(input.value):type==='board'?input.value!=='监事':true;
         input.closest('label').style.display=show?'':'none';
       });
     });
@@ -18,24 +18,25 @@
   function setVotes(value){document.querySelectorAll('.p-yes').forEach(e=>e.value=value)}
   function applyMeetingType(type,resetRoster=true){
     updateType();
+    if(resetRoster)document.querySelectorAll('[name=voting_method]').forEach(e=>e.checked=['现场投票','其他方式投票'].includes(e.value));
     const supervisory=type==='supervisory',board=type==='board';
     const includeBoard=$q('[name=include_board]'),includeExec=$q('[name=include_exec]');
-    labelText(includeBoard,supervisory?'监事':'董事');
+    labelText(includeBoard,'董事');
     includeExec.closest('label').style.display=supervisory?'none':'';
-    if(supervisory){includeBoard.checked=true;includeExec.checked=false}
+    if(supervisory){includeBoard.checked=false;includeExec.checked=false}
     labelText($q('[name=expected_directors]'),supervisory?'应到监事':'应到董事');
     labelText($q('[name=actual_directors]'),supervisory?'实到监事':'实到董事');
     const note=$q('#people .section-title p');if(note)note.textContent=supervisory?'默认全体监事参会；每人可以具有多个身份':board?'默认全体董事、全体高级管理人员参会；每人可以具有多个身份':note.textContent;
     if(supervisory){
-      $q('[name=method]').value='现场会议';
+      document.querySelectorAll('[name=meeting_method]').forEach(e=>e.checked=true);
       $q('[name=contact_name]').value='庄义峰';$q('[name=contact_phone]').value='13661241257';
-      $q('[name=convener]').value='庄义峰';$q('[name=host]').value='庄义峰';$q('[name=host_role]').value='监事会主席';
+      $q('[name=convener]').value='监事会';$q('[name=host]').value='庄义峰';$q('[name=host_role]').value='监事会主席';
       $q('[name=expected_directors]').value=3;$q('[name=actual_directors]').value=3;setVotes(3);
       if(defaults&&resetRoster){$q('[name=term_no]').value=defaults.supervisory.term_no;$q('[name=meeting_no]').value=defaults.supervisory.meeting_no;loadRoster(defaults.supervisory.personnel)}
     }else if(board){
-      $q('[name=method]').value='现场结合电子通讯方式';
+      document.querySelectorAll('[name=meeting_method]').forEach(e=>e.checked=true);
       $q('[name=contact_name]').value='李婧超';$q('[name=contact_phone]').value='13426243126';
-      $q('[name=convener]').value='王川';$q('[name=host]').value='王川';$q('[name=host_role]').value='董事长';
+      $q('[name=convener]').value='董事会';$q('[name=host]').value='王川';$q('[name=host_role]').value='董事长';
       $q('[name=expected_directors]').value=7;$q('[name=actual_directors]').value=7;setVotes(7);
       if(defaults&&resetRoster){$q('[name=term_no]').value=defaults.board.term_no;$q('[name=meeting_no]').value=defaults.board.meeting_no;loadRoster(defaults.board.personnel)}
     }
